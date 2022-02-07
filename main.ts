@@ -1,3 +1,31 @@
+function checkGuess (text: string) {
+    match = 0
+    for (let index = 0; index <= 4; index++) {
+        if (text == Foodlist[index]) {
+            info.changeScoreBy(1)
+            music.baDing.play()
+            match += 1
+        }
+    }
+    if (match == 0) {
+        numberOfMisses += 1
+        game.showLongText(numberOfMisses, DialogLayout.Top)
+        music.magicWand.play()
+    }
+    if (info.score() == 3) {
+        game.over(true)
+    } else if (numberOfMisses == 3) {
+        game.over(false)
+    }
+}
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    Whatfood = game.askForString("What food was on the blanket?")
+    checkGuess(Whatfood)
+})
+let numberOfMisses = 0
+let match = 0
+let Whatfood = ""
+let Foodlist: string[] = []
 scene.setBackgroundImage(img`
     1111133333311111333331111133333311111333333111113333331111133333311111333333311111333333331111133333333311111333333331111133333333111113333333333311111333333333
     1111133333311111333331111133333311111333333111113333331111133333311111333333311111333333331111133333333311111333333331111133333333111113333333333311111333333333
@@ -296,7 +324,7 @@ img`
     . . . . . . . . . . . . . . . . 
     `
 ]
-let Foodlist = [
+Foodlist = [
 "cake",
 "drumstick",
 "donut",
@@ -308,4 +336,6 @@ for (let index = 0; index <= 4; index++) {
     pause(1000)
 }
 Picnicfood.destroy()
-let Whatfood = game.askForString("What food was on the blanket?")
+Whatfood = game.askForString("What food was on the blanket?")
+info.setScore(0)
+checkGuess(Whatfood)
